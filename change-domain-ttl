@@ -2,7 +2,6 @@ import boto3
 
 region = 'YOUR-REGION'
 
-# goodwearmall.com
 hosted_zone = 'YOUR-HOSTED-ZONE-ID'
 
 def lambda_handler(event, context):
