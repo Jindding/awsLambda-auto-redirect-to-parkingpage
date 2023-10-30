@@ -1,0 +1,67 @@
+import boto3
+
+region = 'YOUR-REGION'
+
+hosted_zone = 'YOUR-HOSTED-ZONE-ID'
+
+def lambda_handler(event, context):
+
+    session = boto3.Session(region_name=region)
+    
+    s3 = session.client('s3')
+    
+    website_configuration = {
+        'IndexDocument' : {'Suffix': 'YOUR-PARKING-PAGE.html'},
+        'ErrorDocument': {'Key': 'YOUR-PARKING-PAGE.html'}
+    }
+    
+    response_s3 = s3.put_bucket_website(
+        Bucket = 'YOUR-BUCKET-NAME',
+        WebsiteConfiguration=website_configuration
+    )
+    
+    print(response_s3)
+    
+    route53 = session.client('route53')
+    
+    response_route53 = route53.change_resource_record_sets(
+        HostedZoneId=hosted_zone,
+        ChangeBatch={
+            'Changes' : [
+                {
+                    'Action' : 'DELETE',
+                    'ResourceRecordSet' : {
+                        'Name' : 'YOUR-DOMAIN',
+                        'Type' : 'CNAME',
+                        'TTL' : 60,
+                        'ResourceRecords' : [
+                            {
+                                'Value' : 'YOUR-DOMAIN'
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    )
+    response_route53 = route53.change_resource_record_sets(
+        HostedZoneId=hosted_zone,
+        ChangeBatch={
+            'Changes' : [
+                {
+                    'Action' : 'CREATE',
+                    'ResourceRecordSet' : {
+                        'Name' : 'YOUR-DOMAIN',
+                        'Type' : 'A',
+                        'AliasTarget' : {
+                            'HostedZoneId' : 'YOUR-HOSTED-ZONE-ID',
+                            'DNSName' : 'YOUR-S3-REGION-DNS',
+                            'EvaluateTargetHealth' : True
+                        }
+                    }
+                }
+            ]
+        }
+    )
+
+    print(response_route53)
