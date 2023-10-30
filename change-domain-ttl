@@ -1,0 +1,34 @@
+import boto3
+
+region = 'YOUR-REGION'
+
+# goodwearmall.com
+hosted_zone = 'YOUR-HOSTED-ZONE-ID'
+
+def lambda_handler(event, context):
+
+    session = boto3.Session(region_name=region)
+    route53 = session.client('route53')
+    
+    response_route53 = route53.change_resource_record_sets(
+        HostedZoneId=hosted_zone,
+        ChangeBatch={
+            'Changes' : [
+                {
+                    'Action' : 'UPSERT',
+                    'ResourceRecordSet' : {
+                        'Name' : 'YOUR-DOMAIN',
+                        'Type' : 'CNAME',
+                        'TTL' : 60,
+                        'ResourceRecords' : [
+                            {
+                                'Value' : 'YOUR-DOMAIN'
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    )
+
+    print(response_route53)
