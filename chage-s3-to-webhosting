@@ -1,0 +1,21 @@
+import boto3
+
+region = 'YOUR-REGION'
+
+hosted_zone = 'YOUR-HOSTED-ZONE-ID'
+
+def lambda_handler(event, context):
+
+    session = boto3.Session(region_name=region)
+    s3 = session.client('s3')
+    
+    website_configuration = {
+        'IndexDocument' : {'Suffix': 'YOUR-PARKING-PAGE.html'},
+    }
+    
+    response = s3.put_bucket_website(
+        Bucket = 'YOUR-BUCKET-NAME',
+        WebsiteConfiguration=website_configuration
+    )
+
+    print(response)
