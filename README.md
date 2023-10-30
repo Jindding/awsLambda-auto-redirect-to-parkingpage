@@ -18,7 +18,11 @@ The purpose of this AWS Lambda function is to simplify the process of setting up
 
 ![image](https://github.com/Jindding/awsLambda-auto-redirect-to-parkingpage/assets/49447802/7b293c9a-d518-47b3-937a-6c212080a4fb)
 
+<hr/>
+
 ![image](https://github.com/Jindding/awsLambda-auto-redirect-to-parkingpage/assets/49447802/b12fd971-0ec8-43ae-8ba7-91a6960b8037)
+
+<hr/>
 
 ![image](https://github.com/Jindding/awsLambda-auto-redirect-to-parkingpage/assets/49447802/6d658ab6-95c2-47db-b6cb-04d24c3ab623)
 
